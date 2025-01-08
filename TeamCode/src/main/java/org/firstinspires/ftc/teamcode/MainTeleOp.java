@@ -36,6 +36,10 @@ public class MainTeleOp extends LinearOpMode {
             ));
             drivetrain.updatePoseEstimate();
 
+            // For debugging
+            telemetry.addData("Odometry Pod X", drivetrain.getEncoderX());
+            telemetry.addData("Odometry Pod Y", drivetrain.getEncoderY());
+
             NormalizedRGBA colors = intake.get();
             telemetry.addData("Red", "%.3f", colors.red)
                      .addData("Green", "%.3f", colors.green)
