@@ -10,7 +10,7 @@ public class SlideCalibration extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        linearSlide = hardwareMap.get(DcMotor.class, RobotConfig.DC_SLIDE);
+        linearSlide = hardwareMap.get(DcMotor.class, RobotConfig.MOTOR_SLIDE);
 
         linearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linearSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

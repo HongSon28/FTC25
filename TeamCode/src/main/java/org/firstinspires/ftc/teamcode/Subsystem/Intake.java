@@ -11,6 +11,7 @@ public class Intake {
     private CRServo servo;
     private NormalizedColorSensor sensor;
     private final double SPEED = 0.75;
+    private final double REV_SPEED = -0.25;
     public Intake(HardwareMap hardwareMap) {
         servo = hardwareMap.get(CRServo.class, RobotConfig.SERVO_INTAKE);
         sensor = hardwareMap.get(NormalizedColorSensor.class, RobotConfig.SENSOR);
@@ -20,8 +21,9 @@ public class Intake {
     public NormalizedRGBA get() {
         return sensor.getNormalizedColors();
     }
-    public void setServo(boolean state) {
-        if (state) servo.setPower(SPEED);
+    public void setServo(int state) {
+        if (state == 2) servo.setPower(SPEED);
+        else if (state == 1) servo.setPower(REV_SPEED);
         else servo.setPower(0);
     }
 }

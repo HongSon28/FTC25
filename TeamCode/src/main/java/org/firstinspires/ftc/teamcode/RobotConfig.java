@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.Pose2d;
+
 public class RobotConfig {
     /* drivetrain motor names */
     public static final String DRIVE_LEFT_BACK = "driveLeftBack";
@@ -9,6 +11,7 @@ public class RobotConfig {
 
     /* Motor names */
     public static final String MOTOR_SLIDE = "motorSlide";
+    public static final String MOTOR_OUTTAKE = "motorOuttake";
 
     /* Servo names */
     public static final String SERVO_INTAKE = "servoIntake";
@@ -16,4 +19,12 @@ public class RobotConfig {
 
     /* Sensor names */
     public static final String SENSOR = "colorSensor";
+
+    /* Alliance specific Poses
+       0 = Blue, 1 = Red
+     */
+    public static final Pose2d[] STARTING_POSE  = { new Pose2d(0,0,0),
+                                                    new Pose2d(0,0,0)};
+    public static final Pose2d[] OBSERVATION_ZONE = { new Pose2d(0,0,0),
+                                                      new Pose2d(0,0,0)};
 }
