@@ -20,11 +20,11 @@ public class RobotConfig {
     /* Sensor names */
     public static final String SENSOR = "colorSensor";
 
-    /* Alliance specific Poses
-       0 = Blue, 1 = Red
-     */
-    public static final Pose2d[] STARTING_POSE  = { new Pose2d(0,0,0),
-                                                    new Pose2d(0,0,0)};
-    public static final Pose2d[] OBSERVATION_ZONE = { new Pose2d(0,0,0),
-                                                      new Pose2d(0,0,0)};
+    public static final Pose2d[] STARTING_POSE  = { new Pose2d(120,0,Math.toRadians(-90)),
+                                                    new Pose2d(72,0,Math.toRadians(-90))};
+    /*
+        0 = Closer to Net Zone
+        1 = Closer to Observation Zone
+    */
+    public static final Pose2d NET_ZONE = new Pose2d(120,12, Math.toRadians(45));
 }

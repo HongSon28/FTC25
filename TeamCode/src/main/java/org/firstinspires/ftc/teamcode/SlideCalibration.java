@@ -28,9 +28,9 @@ public class SlideCalibration extends LinearOpMode {
 
 
             telemetry.addData("Slide Position", linearSlide.getCurrentPosition());
+            telemetry.addData("Current Power", power);
             telemetry.update();
         }
-
 
         linearSlide.setPower(0);
     }

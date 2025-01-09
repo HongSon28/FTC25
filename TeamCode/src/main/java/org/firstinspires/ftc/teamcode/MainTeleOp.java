@@ -23,18 +23,18 @@ public class MainTeleOp extends LinearOpMode {
     private HangingSlide hangingSlide;
     private int slideState;
     private boolean outtakeSlideState,outtakeState;
-    private int allianceID; // 0 = Blue, 1 = Red
+    private int startPosID; // 0 = Closer to Net Zone, 1 = Closer to Observation Zone
     private boolean boost;
 
     @Override
     public void runOpMode() {
-        allianceID = -1;
-        while (allianceID == -1) {
-            if (gamepad1.left_bumper) allianceID = 0;
-            if (gamepad1.right_bumper) allianceID = 1;
+        startPosID = -1;
+        while (startPosID == -1) {
+            if (gamepad1.left_bumper) startPosID = 0;
+            if (gamepad1.right_bumper) startPosID = 1;
         }
 
-        drivetrain = new PinpointDrive(hardwareMap, RobotConfig.STARTING_POSE[allianceID]);
+        drivetrain = new PinpointDrive(hardwareMap, RobotConfig.STARTING_POSE[startPosID]);
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         hangingSlide = new HangingSlide(hardwareMap);
@@ -43,8 +43,7 @@ public class MainTeleOp extends LinearOpMode {
         outtakeSlideState = outtakeState = false;
 
         telemetry.addData("Status", "Ready for start");
-        if (allianceID == 0) telemetry.addData("Alliance", "Blue");
-        else telemetry.addData("Alliance","Red");
+        telemetry.addData("Starting Position ID", startPosID);
         telemetry.update();
 
         waitForStart();
@@ -64,6 +63,9 @@ public class MainTeleOp extends LinearOpMode {
             // For debugging
             telemetry.addData("Odometry Pod X", drivetrain.getEncoderX());
             telemetry.addData("Odometry Pod Y", drivetrain.getEncoderY());
+            telemetry.addData("Current X", drivetrain.pose.position.x)
+                     .addData("Current Y", drivetrain.pose.position.y)
+                     .addData("Current Heading", drivetrain.pose.heading.toDouble());
 
             NormalizedRGBA colors = intake.get();
             telemetry.addData("Red", "%.3f", colors.red)
