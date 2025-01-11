@@ -20,6 +20,12 @@ public class RobotConfig {
     /* Sensor names */
     public static final String SENSOR = "colorSensor";
 
+
+    /* Color threshold */
+    public static final int RED_THRESHOLD = 30; //Hue
+    public static final int BLUE_THRESHOLD = 180; //Hue
+
+    /* Poses */
     public static final Pose2d[] STARTING_POSE  = { new Pose2d(120,0,Math.toRadians(-90)),
                                                     new Pose2d(72,0,Math.toRadians(-90))};
     /*

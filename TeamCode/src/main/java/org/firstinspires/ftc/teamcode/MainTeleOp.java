@@ -24,18 +24,21 @@ public class MainTeleOp extends LinearOpMode {
     private int slideState;
     private boolean outtakeSlideState,outtakeState;
     private int startPosID; // 0 = Closer to Net Zone, 1 = Closer to Observation Zone
+    private int allianceID; // 0 = Blue, 1 = Red;
     private boolean boost;
 
     @Override
     public void runOpMode() {
-        startPosID = -1;
-        while (startPosID == -1) {
+        startPosID = allianceID = -1;
+        while (startPosID == -1 || allianceID == -1) {
             if (gamepad1.left_bumper) startPosID = 0;
             if (gamepad1.right_bumper) startPosID = 1;
+            if (gamepad1.cross) allianceID = 0;
+            if (gamepad1.circle) allianceID = 1;
         }
 
         drivetrain = new PinpointDrive(hardwareMap, RobotConfig.STARTING_POSE[startPosID]);
-        intake = new Intake(hardwareMap);
+        intake = new Intake(hardwareMap, allianceID);
         outtake = new Outtake(hardwareMap);
         hangingSlide = new HangingSlide(hardwareMap);
         slideState = 0;
@@ -44,6 +47,7 @@ public class MainTeleOp extends LinearOpMode {
 
         telemetry.addData("Status", "Ready for start");
         telemetry.addData("Starting Position ID", startPosID);
+        telemetry.addData("Alliance ID", allianceID);
         telemetry.update();
 
         waitForStart();
@@ -66,11 +70,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Current X", drivetrain.pose.position.x)
                      .addData("Current Y", drivetrain.pose.position.y)
                      .addData("Current Heading", drivetrain.pose.heading.toDouble());
-
-            NormalizedRGBA colors = intake.get();
-            telemetry.addData("Red", "%.3f", colors.red)
-                     .addData("Green", "%.3f", colors.green)
-                     .addData("Blue", "%.3f", colors.blue);
+            telemetry.addData("Sensor Output", intake.check());
             telemetry.update();
 
             if (gamepad2.left_bumper) intake.setServo(2);
