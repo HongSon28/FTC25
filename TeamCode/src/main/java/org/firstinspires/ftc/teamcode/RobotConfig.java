@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.hardware.PwmControl;
 
 public class RobotConfig {
     /* drivetrain motor names */
@@ -16,6 +17,9 @@ public class RobotConfig {
     /* Servo names */
     public static final String SERVO_INTAKE = "servoIntake";
     public static final String SERVO_OUTTAKE = "servoOuttake";
+
+    /* Servo PWM Range */
+    public static final PwmControl.PwmRange GOBILDA_PWM_RANGE = new PwmControl.PwmRange(500,2500);
 
     /* Sensor names */
     public static final String SENSOR = "colorSensor";
