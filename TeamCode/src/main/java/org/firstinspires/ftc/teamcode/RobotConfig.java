@@ -12,14 +12,21 @@ public class RobotConfig {
 
     /* Motor names */
     public static final String MOTOR_SLIDE = "motorSlide";
+    public static final String MOTOR_INTAKE = "motorIntake";
     public static final String MOTOR_OUTTAKE = "motorOuttake";
 
     /* Servo names */
-    public static final String SERVO_INTAKE = "servoIntake";
     public static final String SERVO_OUTTAKE = "servoOuttake";
+    public static final String SERVO_LOCK = "servoLock";
+    public static final String SERVO_SLIDE_LEFT = "servoSlideLeft";
+    public static final String SERVO_SLIDE_RIGHT = "servoSlideRight";
 
     /* Servo PWM Range */
     public static final PwmControl.PwmRange GOBILDA_PWM_RANGE = new PwmControl.PwmRange(500,2500);
+    public static final PwmControl.PwmRange DS3225_PWM_RANGE = new PwmControl.PwmRange(500,2500);
+
+    public static final PwmControl.PwmRange SG90_PWM_RANGE = new PwmControl.PwmRange(1000,2000);
+    public static final PwmControl.PwmRange MG996R_PWM_RANGE = new PwmControl.PwmRange(1000,2000);
 
     /* Sensor names */
     public static final String SENSOR = "colorSensor";

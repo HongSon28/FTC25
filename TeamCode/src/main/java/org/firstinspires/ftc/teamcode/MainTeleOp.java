@@ -26,6 +26,7 @@ public class MainTeleOp extends LinearOpMode {
     private int startPosID; // 0 = Closer to Net Zone, 1 = Closer to Observation Zone
     private int allianceID; // 0 = Blue, 1 = Red;
     private boolean boost;
+    private boolean locked;
 
     @Override
     public void runOpMode() {
@@ -43,6 +44,7 @@ public class MainTeleOp extends LinearOpMode {
         hangingSlide = new HangingSlide(hardwareMap);
         slideState = 0;
         boost = false;
+        locked = true;
         outtakeSlideState = outtakeState = false;
 
         telemetry.addData("Status", "Ready for start");
@@ -73,10 +75,16 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Sensor Output", intake.check());
             telemetry.update();
 
-            if (gamepad2.left_bumper) intake.setServo(2);
-            else if (gamepad2.right_bumper) intake.setServo(1);
-            else intake.setServo(0);
+            //Intake control
+            if (gamepad2.left_bumper) intake.setMotor(2);
+            else if (gamepad2.right_bumper) intake.setMotor(1);
+            else intake.setMotor(0);
+            intake.setSlide(-gamepad2.left_stick_y);
+            if (gamepad2.right_stick_button) locked = false;
+            if (gamepad2.left_stick_button) locked = true;
+            intake.setLock(locked);
 
+            //Hanging Slides control
             if (gamepad2.dpad_up) slideState = 2;
             if (gamepad2.dpad_down) slideState = 1;
             if (gamepad2.dpad_right) {
@@ -89,6 +97,7 @@ public class MainTeleOp extends LinearOpMode {
             }
             hangingSlide.moveToState(slideState);
 
+            //Outtake control
             if (gamepad2.triangle) outtakeSlideState = true;
             if (gamepad2.cross) outtakeSlideState = false;
             if (gamepad2.circle) outtakeState = true;
