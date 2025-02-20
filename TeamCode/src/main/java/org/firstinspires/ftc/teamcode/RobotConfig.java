@@ -16,10 +16,14 @@ public class RobotConfig {
     public static final String MOTOR_OUTTAKE = "motorOuttake";
 
     /* Servo names */
-    public static final String SERVO_OUTTAKE = "servoOuttake";
+    public static final String SERVO_ARM = "servoArm";
+    public static final String SERVO_WRIST = "servoWrist";
+    public static final String SERVO_CLAW = "servoClaw";
     public static final String SERVO_LOCK = "servoLock";
     public static final String SERVO_SLIDE_LEFT = "servoSlideLeft";
     public static final String SERVO_SLIDE_RIGHT = "servoSlideRight";
+    public static final String SERVO_LIFT_LEFT = "servoLiftLeft";
+    public static final String SERVO_LIFT_RIGHT = "servoLiftRight";
 
     /* Servo PWM Range */
     public static final PwmControl.PwmRange GOBILDA_PWM_RANGE = new PwmControl.PwmRange(500,2500);

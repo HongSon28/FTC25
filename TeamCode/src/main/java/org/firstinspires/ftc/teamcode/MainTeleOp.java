@@ -1,14 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.teamcode.Roadrunner.PinpointDrive;
 import org.firstinspires.ftc.teamcode.Subsystem.HangingSlide;
@@ -21,8 +16,8 @@ public class MainTeleOp extends LinearOpMode {
     private Intake intake;
     private Outtake outtake;
     private HangingSlide hangingSlide;
-    private int slideState;
-    private boolean outtakeSlideState,outtakeState;
+    private int slideState, liftState;
+    private boolean outtakeSlideState, outtakeArmState;
     private int startPosID; // 0 = Closer to Net Zone, 1 = Closer to Observation Zone
     private int allianceID; // 0 = Blue, 1 = Red;
     private boolean boost;
@@ -40,12 +35,12 @@ public class MainTeleOp extends LinearOpMode {
 
         drivetrain = new PinpointDrive(hardwareMap, RobotConfig.STARTING_POSE[startPosID]);
         intake = new Intake(hardwareMap, allianceID);
-        outtake = new Outtake(hardwareMap);
+        outtake = new Outtake(hardwareMap,telemetry);
         hangingSlide = new HangingSlide(hardwareMap);
-        slideState = 0;
+        slideState = liftState = 0;
         boost = false;
-        locked = true;
-        outtakeSlideState = outtakeState = false;
+        locked = false;
+        outtakeSlideState = outtakeArmState = false;
 
         telemetry.addData("Status", "Ready for start");
         telemetry.addData("Starting Position ID", startPosID);
@@ -67,24 +62,32 @@ public class MainTeleOp extends LinearOpMode {
             drivetrain.updatePoseEstimate();
 
             // For debugging
+            /*
             telemetry.addData("Odometry Pod X", drivetrain.getEncoderX());
             telemetry.addData("Odometry Pod Y", drivetrain.getEncoderY());
             telemetry.addData("Current X", drivetrain.pose.position.x)
                      .addData("Current Y", drivetrain.pose.position.y)
                      .addData("Current Heading", drivetrain.pose.heading.toDouble());
-            telemetry.addData("Sensor Output", intake.check());
-            telemetry.update();
+            telemetry.addData("Current Angle",intake.curPos);
+            telemetry.update();*/
 
-            //Intake control
+            //Intake control (using bumpers and sticks)
             if (gamepad2.left_bumper) intake.setMotor(2);
             else if (gamepad2.right_bumper) intake.setMotor(1);
             else intake.setMotor(0);
             intake.setSlide(-gamepad2.left_stick_y);
+
+            if (!intake.check())  locked = true;
             if (gamepad2.right_stick_button) locked = false;
             if (gamepad2.left_stick_button) locked = true;
             intake.setLock(locked);
 
-            //Hanging Slides control
+            if (gamepad2.touchpad) liftState = 0;
+            if (-gamepad2.right_stick_y > 0.75) liftState = 1;
+            if (-gamepad2.right_stick_y < -0.75) liftState = 2;
+            intake.setLift(liftState);
+
+            //Hanging Slides control (using dpad buttons)
             if (gamepad2.dpad_up) slideState = 2;
             if (gamepad2.dpad_down) slideState = 1;
             if (gamepad2.dpad_right) {
@@ -97,13 +100,23 @@ public class MainTeleOp extends LinearOpMode {
             }
             hangingSlide.moveToState(slideState);
 
-            //Outtake control
-            if (gamepad2.triangle) outtakeSlideState = true;
-            if (gamepad2.cross) outtakeSlideState = false;
-            if (gamepad2.circle) outtakeState = true;
-            if (gamepad2.square) outtakeState = false;
-            outtake.setSlide(outtakeSlideState);
-            outtake.setServo(outtakeState);
+            //Outtake control (using shapes buttons)
+            if (gamepad2.triangle) outtake.setSlide(true);
+            if (gamepad2.cross) outtake.setSlide(false);
+            if (gamepad2.circle) outtake.setArm(1);
+            else if (gamepad2.square) outtake.setArm(-1);
+            else outtake.setArm(0);
+
+            if (gamepad2.right_trigger > 0.1) outtake.setWrist(1);
+            else if (gamepad2.left_trigger > 0.1) outtake.setWrist(-1);
+            else outtake.setWrist(0);
+
+            //Claw control
+            if (gamepad1.left_bumper) outtake.setClaw(false);
+            if (gamepad1.right_bumper) outtake.setClaw(true);
+
+            outtake.control(telemetry);
+
         }
     }
 
